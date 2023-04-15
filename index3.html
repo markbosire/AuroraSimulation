@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <title>Aurora Simulation</title>
+    <style>
+      #canvas {
+        width: 100%;
+        height: 100%;
+        background-color: black;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Aurora Simulation</h1>
+    <canvas id="canvas"></canvas>
+    <div id="controls">
+      <label for="speed">Speed:</label>
+      <input type="range" id="speed" min="1" max="10" value="5" />
+      <br />
+      <label for="size">Size:</label>
+      <input type="range" id="size" min="1" max="20" value="10" />
+      <br />
+      <label for="density">Density:</label>
+      <input type="range" id="density" min="10" max="100" value="50" />
+      <br />
+      <label for="gas">Gas:</label>
+      <select id="gas">
+        <option value="oxygen">Oxygen</option>
+        <option value="nitrogen">Nitrogen</option>
+      </select>
+    </div>
+    <script src="aurora.js"></script>
+  </body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Aurora Simulation</title>
+    <style>
+      #canvas-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        pointer-events: none;
+      }
+      body {
+        background-color: #1f1f1f;
+        color: #fff;
+      }
+      input[type="range"] {
+        width: 200px;
+        color: red !important;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Aurora Simulation</h1>
+    <canvas id="canvas"></canvas><br /><br />
+    <label>Number of Particles:</label
+    ><input
+      type="range"
+      id="particleCount"
+      min="50"
+      max="500"
+      value="200"
+    /><br />
+    <label>Particle Speed:</label
+    ><input type="range" id="speed" min="0" max="20" value="10" /><br />
+    <script>
+      let particleCount = 200;
+      let particleSpeed = 10;
+
+      const setParticleCount = (count) => {
+        particleCount = parseInt(count);
+      };
+
+      const setParticleSpeed = (speed) => {
+        particleSpeed = parseInt(speed);
+      };
+
+      const particleCountInput = document.querySelector("#particleCount");
+      particleCountInput.addEventListener("input", (event) => {
+        setParticleCount(event.target.value);
+      });
+
+      const particleSpeedInput = document.querySelector("#speed");
+      particleSpeedInput.addEventListener("input", (event) => {
+        setParticleSpeed(event.target.value);
+      });
+
+      const canvas = document.querySelector("#canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const particles = [];
+
+      for (let i = 0; i < particleCount; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        const xv = (Math.random() - 0.5) * particleSpeed;
+        const yv = (Math.random() - 0.5) * particleSpeed;
+        particles.push(createParticle(x, y, xv, yv));
+      }
+
+      function createParticle(x, y, xv, yv) {
+        return {
+          position: {
+            x: x,
+            y: y,
+          },
+          velocity: {
+            x: xv,
+            y: yv,
+          },
+        };
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particles.length; i++) {
+          const particle = particles[i];
+          drawParticle(particle);
+          updateParticle(particle);
+          if (
+            particle.position.x < 0 ||
+            particle.position.x >= canvas.width ||
+            particle.position.y < 0 ||
+            particle.position.y >= canvas.height
+          ) {
+            particles.splice(i, 1);
+            i--;
+            particles.push(
+              createParticle(
+                Math.random() * canvas.width,
+                Math.random() * canvas.height,
+                (Math.random() - 0.5) * particleSpeed,
+                (Math.random() - 0.5) * particleSpeed
+              )
+            );
+          }
+        }
+        requestAnimationFrame(draw);
+      }
+
+      function updateParticle(particle) {
+        particle.position.x += particle.velocity.x;
+        particle.position.y += particle.velocity.y;
+      }
+
+      function drawParticle(particle) {
+        const hue =
+          ((particle.position.x + particle.position.y) /
+            (canvas.width + canvas.height)) *
+          360;
+        ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+        ctx.fillRect(particle.position.x, particle.position.y, 2, 2);
+      }
+
+      draw();
+    </script>
+  </body>
+</html>
